@@ -1,0 +1,68 @@
+# ============== Python ==============
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+venv/
+env/
+ENV/
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ============== Node / Next.js ==============
+node_modules/
+.next/
+out/
+.turbo/
+.vercel/
+*.tsbuildinfo
+npm-debug.log*
+yarn-error.log*
+
+# ============== Data (لا ترفع البيانات المولدة) ==============
+data/*.csv
+data/*.txt
+data/*.parquet
+!data/.gitkeep
+
+# ============== Models ==============
+*.pkl
+*.joblib
+*.h5
+*.pt
+*.onnx
+models/
+
+# ============== Environment ==============
+.env
+.env.local
+.env.*.local
+*.env
+
+# ============== IDE ==============
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ============== OS ==============
+.DS_Store
+Thumbs.db
+
+# ============== Logs ==============
+*.log
+logs/
+
+# ============== Misc ==============
+*.bak
+*.tmp
+.cache/
