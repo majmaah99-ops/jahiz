@@ -12,8 +12,8 @@ defaults:
 
 jobs:
   test:
-    name: Test — Python ${{ matrix.python-version }}
-    runs-on: ubuntu-latest
+    name: Test - Python ${{ matrix.python-version }}
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
@@ -30,35 +30,45 @@ jobs:
           cache: pip
           cache-dependency-path: backend/requirements.txt
 
-      - name: Install dependencies
+      - name: Install system dependencies
         run: |
-          python -m pip install --upgrade pip
+          sudo apt-get update
+          sudo apt-get install -y build-essential gcc g++ make
+
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+
+      - name: Install Python dependencies
+        run: |
           pip install -r requirements.txt
           pip install pytest pytest-cov httpx
 
+      - name: Verify imports
+        run: |
+          python -c "import pandas; print('pandas', pandas.__version__)"
+          python -c "import numpy; print('numpy', numpy.__version__)"
+          python -c "import prophet; print('prophet OK')"
+          python -c "import xgboost; print('xgboost', xgboost.__version__)"
+          python -c "import shap; print('shap', shap.__version__)"
+
       - name: Generate synthetic data
         run: python -m app.data_generator
+
+      - name: Verify data files
+        run: |
+          ls -la data/
+          test -f data/invoices.csv && echo "invoices.csv OK"
+          test -f data/bank.csv && echo "bank.csv OK"
 
       - name: Run pipeline smoke test
         run: python -m app.pipeline
 
       - name: Run unit tests
-        run: |
-          pytest tests/ -v \
-            --cov=app \
-            --cov-report=term-missing \
-            --cov-report=xml
-
-      - name: Upload coverage
-        if: matrix.python-version == '3.11'
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: backend/coverage.xml
+        run: pytest tests/ -v --cov=app --cov-report=term-missing
 
   lint:
     name: Lint
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
