@@ -188,3 +188,50 @@ sequenceDiagram
     B->>DB: Save analysis (metadata only)
     B-->>F: Full JSON response
     F-->>U: Dashboard + Score + Report
+
+OAuth 2.0 + PKCE
+    ↓
+JWT (short-lived, 15 min)
+    ↓
+Refresh Token (7 days)
+Load Balancer (Nginx)
+       │
+       ├── App Instance 1 ──┐
+       ├── App Instance 2 ──┼── PostgreSQL (Primary + Replica)
+       └── App Instance 3 ──┘   Redis (Sentinel)
+Push to main
+    ↓
+GitHub Actions:
+  1. Install deps
+  2. Generate synthetic data
+  3. Run pipeline smoke test
+  4. Run pytest (coverage > 80%)
+  5. Lint (ruff + black)
+    ↓
+Deploy:
+  - Frontend → Vercel (auto)
+  - Backend → Railway (auto)
+    ↓
+Health check → Notify (Slack)
+# App
+APP_NAME=JAHIZ
+ENVIRONMENT=production
+LOG_LEVEL=INFO
+
+# Database
+DATABASE_URL=postgresql://...
+REDIS_URL=redis://...
+
+# Integrations
+LEAN_APP_ID=...
+LEAN_APP_SECRET=...
+ZATCA_CLIENT_ID=...
+ZATCA_CLIENT_SECRET=...
+
+# LLM
+OPENAI_API_KEY=sk-...
+OPENAI_MODEL=gpt-4o-mini
+
+# Security
+JWT_SECRET=...
+ENCRYPTION_KEY=...
