@@ -7,10 +7,8 @@ __pycache__/
 build/
 dist/
 *.egg-info/
-.eggs/
 venv/
 env/
-ENV/
 .venv/
 .pytest_cache/
 .mypy_cache/
@@ -22,13 +20,10 @@ htmlcov/
 node_modules/
 .next/
 out/
-.turbo/
 .vercel/
 *.tsbuildinfo
-npm-debug.log*
-yarn-error.log*
 
-# ============== Data (لا ترفع البيانات المولدة) ==============
+# ============== Data ==============
 data/*.csv
 data/*.txt
 data/*.parquet
@@ -46,7 +41,6 @@ models/
 .env
 .env.local
 .env.*.local
-*.env
 
 # ============== IDE ==============
 .vscode/
@@ -61,8 +55,3 @@ Thumbs.db
 # ============== Logs ==============
 *.log
 logs/
-
-# ============== Misc ==============
-*.bak
-*.tmp
-.cache/
