@@ -89,14 +89,20 @@ export const MOCK_ANALYZE: AnalyzeResponse = {
 export function generateMockForecast(): ForecastPoint[] {
   const points: ForecastPoint[] = [];
   const start = new Date();
-  let cumulative = 0;
+  let cumulative = 50000;  // رصيد افتتاحي 50,000 ر.س
+
   for (let i = 0; i < 45; i++) {
     const date = new Date(start);
     date.setDate(date.getDate() + i);
     const dow = date.getDay();
     const weekendBoost = dow === 5 || dow === 6 ? 1.35 : 1.0;
     const yhat = (2500 + Math.sin(i / 5) * 800 + Math.random() * 400) * weekendBoost;
-    cumulative += yhat - 2200;
+
+    // فجوة سيولة في الأسبوع 5-6 (يوم 30-40)
+    const isGapWeek = i >= 30 && i <= 40;
+    const expense = isGapWeek ? 3400 : 2200;
+
+    cumulative += yhat - expense;
     points.push({
       ds: date.toISOString().split("T")[0],
       yhat: Math.round(yhat),
